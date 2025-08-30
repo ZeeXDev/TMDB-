@@ -1,3 +1,6 @@
+import os
+import sys
+import asyncio
 import requests
 from pyrogram import Client, filters, enums
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
@@ -5,18 +8,20 @@ import logging
 from html import escape
 from datetime import datetime
 
-# Configuration TMDB
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
+
+PORT = int(os.environ.get("PORT", 8080))
+
 API_KEY = "f2bed62b5977bce26540055276d0046c"
 BASE_URL = "https://api.themoviedb.org/3"
 LANGUE = "fr-FR"
-TIMEOUT_API = 30  # Augmenté le timeout à 30 secondes
+TIMEOUT_API = 30  
 
-# Configuration Telegram
 API_ID = 25926022
 API_HASH = "30db27d9e56d854fb5e943723268db32"
 BOT_TOKEN = "7703477452:AAFToIODwRMbYkwmxCYikvufYvZVflr9YzU"
 
-# Emojis pour les genres
 GENRES_EMOJI = {
     # Genres de films/séries
     28: "🔫 Action",
@@ -47,7 +52,7 @@ GENRES_EMOJI = {
     10767: "🗣 Talk",
     10768: "⚔ War & Politics",
     
-    # Genres spécifiques aux animés
+    # Genres animés
     1001: "😳 Ecchi",
     1002: "👨‍👩‍👧‍👦 Harem",
     1003: "🌌 Isekai",
@@ -70,7 +75,6 @@ GENRES_EMOJI = {
     1020: "🧊 Tranche de vie"
 }
 
-# Noms des mois en français
 MOIS = {
     1: "janvier", 2: "février", 3: "mars", 4: "avril",
     5: "mai", 6: "juin", 7: "juillet", 8: "août",
@@ -81,7 +85,6 @@ MOIS = {
 app = Client("tmdb_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 logger = logging.getLogger(__name__)
 
-# Dictionnaire pour stocker les recherches en cours
 recherches_en_cours = {}
 
 def limiter_texte(texte, limite=1024):
