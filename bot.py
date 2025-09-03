@@ -177,7 +177,7 @@ async def rechercher_media_multiple(query):
 
         # Filtrer seulement les films et séries
         media_results = [r for r in results if r.get("media_type") in ["movie", "tv"]]
-        return media_results[:10]  # Limiter à 10 résultats maximum
+        return media_results[:20]  # Limiter à 10 résultats maximum
         
     except requests.exceptions.Timeout:
         logger.error(f"Timeout recherche TMDB pour: {query}")
